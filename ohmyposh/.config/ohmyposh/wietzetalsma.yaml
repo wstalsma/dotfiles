@@ -26,6 +26,11 @@ blocks:
 - type: prompt
   alignment: left
   segments:
+#  - template: ╭─
+#    foreground: yellow
+#    background: transparent
+#    type: text
+#    style: plain
   - leading_diamond: 
     trailing_diamond: 
     template: " {{ if .SSHSession }}\ueba9 {{ end }}{{ .UserName }} "
@@ -34,8 +39,8 @@ blocks:
     type: session
     style: diamond
   - properties:
-      style: folder
-    template: " \uea83 {{ path .Path .Location }} "
+      style: full
+    template: " \uea83 {{ .Path }} "
     foreground: p:white
     powerline_symbol: 
     background: p:orange
@@ -70,49 +75,45 @@ blocks:
       always_enabled: true
     leading_diamond: <transparent,background></>
     trailing_diamond: 
-    template: " CONFIG ERROR "
+    template: "{{ if eq .Code 0 }} \uf00c {{ else }} \uf071 {{ reason .Code }} {{ end }}"
     foreground: p:white
     background: p:blue
     type: status
     style: diamond
     background_templates:
-    - p:red
-- type: rprompt
+    - "{{ if .Error }}p:red{{ end }}"
+  newline: true
+- type: prompt
+  alignment: right
   segments:
-  - properties:
-      display_mode: files
-      fetch_package_manager: false
-      home_enabled: false
-    template: "\ue718 "
-    foreground: p:green
-    background: transparent
-    type: node
+  - background: p:blue
+    foreground: p:black
     style: plain
-  - properties:
-      fetch_version: false
-    template: "\ue626 "
-    foreground: p:blue
-    background: transparent
-    type: go
-    style: plain
-  - properties:
-      display_mode: files
-      fetch_version: false
-      fetch_virtual_env: false
-    template: "\ue235 "
-    foreground: p:yellow
-    background: transparent
-    type: python
-    style: plain
-  - template: "in <p:blue><b>{{ .Name }}</b></> "
-    foreground: p:white
-    background: transparent
+    template: "<p:blue,transparent>\ue0b6</>\uf489 {{ .Name }} <transparent,p:blue>\ue0b2</>"
+    leading_diamond: "\ue0b6"
+    trailing_diamond: "\ue0b2"
     type: shell
-    style: plain
-  - template: at <p:blue><b>{{ .CurrentDate | date "15:04:05" }}</b></>
-    foreground: p:white
-    background: transparent
+  - template: " {{ .CurrentDate | date .Format }} "
+    foreground: p:black
+    background: p:green
+    invert_powerline: true
+    leading_diamond: "\ue0b2"
+    trailing_diamond: 
     type: time
+    style: diamond
+- type: prompt
+  alignment: left
+  newline: true
+  segments:
+#  - template: "\u2570\u2500"
+#    foreground: yellow
+#    background: transparent
+#    type: text
+#    style: powerline
+  - template: "\u276f "
+    foreground: magenta
+    background: transparent
+    type: text
     style: plain
 tooltips:
 - properties:
@@ -138,4 +139,4 @@ tooltips:
   tips:
   - az
 version: 3
-final_space: true
+final-space: true
